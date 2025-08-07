@@ -4,9 +4,9 @@ SAÍDA: Coloração válida do grafo usando o menor número de cores possível
 
 INÍCIO
     // Inicialização
-    cores[1..n] ← -1                    // Nenhum vértice colorido inicialmente
-    colorido[1..n] ← FALSO              // Marca vértices já coloridos
-    num_cores ← 0                       // Contador de cores utilizadas
+    cores[1..n] ← -1           // Nenhum vértice colorido inicialmente
+    colorido[1..n] ← FALSO     // Marca vértices já coloridos
+    num_cores ← 0              // Contador de cores utilizadas
     
     // PASSO 1: Escolher vértice inicial (maior grau)
     v_inicial ← vértice com maior grau em G
