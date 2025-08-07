@@ -1,0 +1,43 @@
+ALGORITMO ColoracaoGulosa(G: Grafo)
+ENTRADA: G - grafo não direcionado com V vértices
+SAÍDA: resultado[] - array com a cor de cada vértice
+
+INÍCIO
+    // Inicialização
+    resultado ← array de tamanho G.numVertices inicializado com -1
+    disponivel ← array de tamanho G.numVertices de booleanos
+    
+    // Colorir o primeiro vértice com cor 0
+    resultado[0] ← 0
+    
+    // Colorir os vértices restantes
+    PARA u ← 1 ATÉ G.numVertices-1 FAÇA
+        
+        // Marcar todas as cores como disponíveis
+        PARA i ← 0 ATÉ G.numVertices-1 FAÇA
+            disponivel[i] ← VERDADEIRO
+        FIM PARA
+        
+        // Marcar cores dos vizinhos como indisponíveis
+        atual ← G.listaAdjacencia[u]
+        ENQUANTO atual ≠ NULO FAÇA
+            vizinho ← atual.vertice
+            SE resultado[vizinho] ≠ -1 ENTÃO
+                disponivel[resultado[vizinho]] ← FALSO
+            FIM SE
+            atual ← atual.proximo
+        FIM ENQUANTO
+        
+        // Encontrar primeira cor disponível
+        cor ← 0
+        ENQUANTO cor < G.numVertices E disponivel[cor] = FALSO FAÇA
+            cor ← cor + 1
+        FIM ENQUANTO
+        
+        // Atribuir a cor ao vértice
+        resultado[u] ← cor
+        
+    FIM PARA
+    
+    RETORNAR resultado
+FIM

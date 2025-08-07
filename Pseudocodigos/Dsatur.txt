@@ -1,0 +1,96 @@
+ALGORITMO DSatur_Coloracao_Grafo(G)
+ENTRADA: Grafo G = (V, E) com n vértices
+SAÍDA: Coloração válida do grafo usando o menor número de cores possível
+
+INÍCIO
+    // Inicialização
+    cores[1..n] ← -1                    // Nenhum vértice colorido inicialmente
+    colorido[1..n] ← FALSO              // Marca vértices já coloridos
+    num_cores ← 0                       // Contador de cores utilizadas
+    
+    // PASSO 1: Escolher vértice inicial (maior grau)
+    v_inicial ← vértice com maior grau em G
+    cores[v_inicial] ← 0
+    colorido[v_inicial] ← VERDADEIRO
+    num_cores ← 1
+    vertices_restantes ← n - 1
+    
+    // PASSO 2: Colorir vértices restantes usando critério DSatur
+    ENQUANTO vertices_restantes > 0 FAÇA
+        
+        // Encontrar próximo vértice pelo critério DSatur
+        max_saturacao ← -1
+        max_grau ← -1
+        proximo_vertice ← -1
+        
+        PARA CADA v ∈ V FAÇA
+            SE colorido[v] = FALSO ENTÃO
+                sat ← Calcular_Grau_Saturacao(v, G, cores)
+                grau ← Calcular_Grau(v, G)
+                
+                SE (sat > max_saturacao) OU 
+                   (sat = max_saturacao E grau > max_grau) ENTÃO
+                    max_saturacao ← sat
+                    max_grau ← grau
+                    proximo_vertice ← v
+                FIM SE
+            FIM SE
+        FIM PARA
+        
+        // Encontrar menor cor disponível para o vértice escolhido
+        cores_usadas[0..n] ← FALSO
+        
+        PARA CADA u adjacente a proximo_vertice FAÇA
+            SE cores[u] ≠ -1 ENTÃO
+                cores_usadas[cores[u]] ← VERDADEIRO
+            FIM SE
+        FIM PARA
+        
+        cor_escolhida ← 0
+        ENQUANTO cores_usadas[cor_escolhida] = VERDADEIRO FAÇA
+            cor_escolhida ← cor_escolhida + 1
+        FIM ENQUANTO
+        
+        // Colorir o vértice
+        cores[proximo_vertice] ← cor_escolhida
+        colorido[proximo_vertice] ← VERDADEIRO
+        vertices_restantes ← vertices_restantes - 1
+        
+        SE cor_escolhida ≥ num_cores ENTÃO
+            num_cores ← cor_escolhida + 1
+        FIM SE
+        
+    FIM ENQUANTO
+    
+    RETORNAR (cores, num_cores)
+FIM
+
+FUNÇÃO Calcular_Grau_Saturacao(v, G, cores)
+ENTRADA: Vértice v, Grafo G, Array de cores
+SAÍDA: Grau de saturação do vértice v
+
+INÍCIO
+    cores_distintas ← conjunto vazio
+    
+    PARA CADA u adjacente a v FAÇA
+        SE cores[u] ≠ -1 ENTÃO
+            cores_distintas ← cores_distintas ∪ {cores[u]}
+        FIM SE
+    FIM PARA
+    
+    RETORNAR |cores_distintas|
+FIM
+
+FUNÇÃO Calcular_Grau(v, G)
+ENTRADA: Vértice v, Grafo G
+SAÍDA: Grau do vértice v
+
+INÍCIO
+    grau ← 0
+    PARA CADA u ∈ V FAÇA
+        SE (v,u) ∈ E ENTÃO
+            grau ← grau + 1
+        FIM SE
+    FIM PARA
+    RETORNAR grau
+FIM
